@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { BaseDirectory, createDir } from "@tauri-apps/api/fs";
+import { motion } from 'framer-motion';
 
 const Paint = () => {
 
@@ -18,8 +19,7 @@ const Paint = () => {
   }, [])
 
   return (
-    <div>
-      Stuff
+    <div className='flex items-center justify-center w-screen overflow-scroll h-screen'>
     </div>
   )
 }
