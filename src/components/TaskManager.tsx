@@ -14,6 +14,7 @@ const TaskManager = () => {
   const [addDoing, setAddDoing] = useState(false)
   const [addDone, setAddDone] = useState(false)
   const [itemDragged, setItemDragged] = useState<number>()
+  const [dragging, setDragging] = useState("")
   const toDoRef =  useRef() as React.MutableRefObject<HTMLTextAreaElement>
   const doingRef =  useRef() as React.MutableRefObject<HTMLTextAreaElement>
   const doneRef =  useRef() as React.MutableRefObject<HTMLTextAreaElement>
@@ -104,7 +105,7 @@ const TaskManager = () => {
 
 
   const handleDragFinishToDo = (toDo:any, id:any)  => {
-
+    console.log(itemDragged)
     if (dragRef.current!.getBoundingClientRect().left >= doingsListRef.current!.getBoundingClientRect().left && dragRef.current!.getBoundingClientRect().right <= doingsListRef.current!.getBoundingClientRect().right ) {
       setDoings((prevDoings:any) => ([...prevDoings, {text: toDo.text}]))
       handleRemoveToDo(id)
@@ -114,10 +115,10 @@ const TaskManager = () => {
       handleRemoveToDo(id)
       setItemDragged(undefined)
     } 
-
+    setDragging("")
   }
   const handleDragFinishDoings = (doing:any, id:any)  => {
-
+    console.log(itemDragged)
     if (dragRef.current!.getBoundingClientRect().left >= toDosListRef.current!.getBoundingClientRect().left && dragRef.current!.getBoundingClientRect().right <= toDosListRef.current!.getBoundingClientRect().right ) {
       setToDos((prevToDos:any) => ([...prevToDos, {text: doing.text}]))
       handleRemoveDoing(id)
@@ -127,11 +128,11 @@ const TaskManager = () => {
       handleRemoveDoing(id)
       setItemDragged(undefined)
     }
-
+    setDragging("")
   }
 
   const handleDragFinishDone = (done:any, id:any)  => {
-
+    console.log(itemDragged)
     if (dragRef.current!.getBoundingClientRect().left >= toDosListRef.current!.getBoundingClientRect().left && dragRef.current!.getBoundingClientRect().right <= toDosListRef.current!.getBoundingClientRect().right ) {
       setToDos((prevToDos:any) => ([...prevToDos, {text: done.text}]))
       handleRemoveDone(id)
@@ -141,7 +142,7 @@ const TaskManager = () => {
       handleRemoveDone(id)
       setItemDragged(undefined)
     }
-
+    setDragging("")
   }
 
   return (
@@ -162,11 +163,11 @@ const TaskManager = () => {
                 drag
                 dragSnapToOrigin={true}
                 whileTap={{ scale: 0.95 }}
-                onDragStart={() => {setItemDragged(index)}}
+                onDragStart={() => {setItemDragged(index), setDragging("todo")}}
                 onDragEnd={() => {handleDragFinishToDo(toDo, index)}}
                 key={index} className=' group  w-full items-center justify-center flex'>
           <textarea 
-          ref={itemDragged === index ? dragRef : null}
+          ref={itemDragged === index && dragging==="todo" ? dragRef : null}
           readOnly={true} value={toDo.text} className='w-full select-none cursor-pointer flex shadow-md p-2 rounded-md text-sm resize-none outline-none'/>
           <BsTrash onClick={handleRemoveToDo} className='w-4 h-4 opacity-0 duration-300 group-hover:opacity-100 hover:text-gray-300 cursor-pointer ml-48 mt-8 absolute'/>
           </motion.div>
@@ -192,11 +193,11 @@ const TaskManager = () => {
                 drag
                 dragSnapToOrigin={true}
                 whileTap={{ scale: 0.95 }}
-                onDragStart={() => {setItemDragged(index)}}
+                onDragStart={() => {setItemDragged(index), setDragging("doing")}}
                 onDragEnd={() => {handleDragFinishDoings(doing, index)}}
                 key={index} className=' group  w-full items-center justify-center flex'>
           <textarea 
-          ref={itemDragged === index ? dragRef : null}
+          ref={itemDragged === index && dragging==="doing" ? dragRef : null}
           readOnly={true} value={doing.text} className='w-full  flex shadow-md p-2 rounded-md text-sm resize-none outline-none'/>
           <BsTrash onClick={handleRemoveDoing} className='w-4 h-4 opacity-0 duration-300 group-hover:opacity-100 hover:text-gray-300 cursor-pointer ml-48 mt-8 absolute'/>
           </motion.div>
@@ -223,11 +224,11 @@ const TaskManager = () => {
                 drag
                 dragSnapToOrigin={true}
                 whileTap={{ scale: 0.95 }}
-                onDragStart={() => {setItemDragged(index)}}
+                onDragStart={() => {setItemDragged(index), setDragging("done")}}
                 onDragEnd={() => {handleDragFinishDone(done, index)}}
                 key={index} className=' group  w-full items-center justify-center flex'>
           <textarea 
-          ref={itemDragged === index ? dragRef : null}
+          ref={itemDragged === index && dragging==="done" ? dragRef : null}
           readOnly={true} value={done.text} className='w-full  flex shadow-md p-2 rounded-md text-sm resize-none outline-none'/>
           <BsTrash onClick={handleRemoveDone} className='w-4 h-4 opacity-0 duration-300 group-hover:opacity-100 hover:text-gray-300 cursor-pointer ml-48 mt-8 absolute'/>
           </motion.div>
